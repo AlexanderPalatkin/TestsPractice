@@ -20,7 +20,13 @@ class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        presenter.onAttach(this)
         setUI()
+    }
+
+    override fun onDestroy() {
+        presenter.onDetach()
+        super.onDestroy()
     }
 
     private fun setUI() {

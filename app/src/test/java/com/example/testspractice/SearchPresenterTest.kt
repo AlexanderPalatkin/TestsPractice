@@ -5,11 +5,12 @@ import com.example.testspractice.model.SearchResult
 import com.example.testspractice.presenter.search.SearchPresenter
 import com.example.testspractice.repository.GitHubRepository
 import com.example.testspractice.view.search.ViewSearchContract
-import org.junit.Assert
+import com.nhaarman.mockito_kotlin.*
+import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import retrofit2.Response
 
@@ -25,7 +26,7 @@ class SearchPresenterTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
+        MockitoAnnotations.openMocks(this)
         //Создаем Презентер, используя моки Репозитория и Вью, проинициализированные строкой выше
         presenter = SearchPresenter(viewContract, repository)
     }
@@ -36,7 +37,7 @@ class SearchPresenterTest {
         //Запускаем код, функционал которого хотим протестировать
         presenter.searchGitHub("some query")
         //Убеждаемся, что все работает как надо
-        Mockito.verify(repository, Mockito.times(1)).searchGithub(searchQuery, presenter)
+        verify(repository, times(1)).searchGithub(searchQuery, presenter)
     }
 
     @Test //Проверяем работу метода handleGitHubError()
@@ -44,7 +45,7 @@ class SearchPresenterTest {
         //Вызываем у Презентера метод handleGitHubError()
         presenter.handleGitHubError()
         //Проверяем, что у viewContract вызывается метод displayError()
-        Mockito.verify(viewContract, Mockito.times(1)).displayError()
+        verify(viewContract, times(1)).displayError()
     }
 
     //Проверяем работу метода handleGitHubResponse
@@ -52,37 +53,37 @@ class SearchPresenterTest {
     @Test //Для начала проверим, как приходит ответ сервера
     fun handleGitHubResponse_ResponseUnsuccessful() {
         //Создаем мок ответа сервера с типом Response<SearchResponse?>?
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
+        val response = mock<Response<SearchResponse?>>()
         //Описываем правило, что при вызове метода isSuccessful должен возвращаться false
-        Mockito.`when`(response.isSuccessful).thenReturn(false)
+        whenever(response.isSuccessful).thenReturn(false)
         //Убеждаемся, что ответ действительно false
-        Assert.assertFalse(response.isSuccessful)
+        assertFalse(response.isSuccessful)
     }
 
     @Test //Теперь проверим, как у нас обрабатываются ошибки
     fun handleGitHubResponse_Failure() {
         //Создаем мок ответа сервера с типом Response<SearchResponse?>?
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
+        val response = mock<Response<SearchResponse?>>()
         //Описываем правило, что при вызове метода isSuccessful должен возвращаться false
         //В таком случае должен вызываться метод viewContract.displayError(...)
-        Mockito.`when`(response.isSuccessful).thenReturn(false)
+        whenever(response.isSuccessful).thenReturn(false)
 
         //Вызывваем у Презентера метод handleGitHubResponse()
         presenter.handleGitHubResponse(response)
 
         //Убеждаемся, что вызывается верный метод: viewContract.displayError("Response is null or unsuccessful"), и что он вызывается единожды
-        Mockito.verify(viewContract, Mockito.times(1))
+        verify(viewContract, times(1))
             .displayError("Response is null or unsuccessful")
     }
 
     @Test //Проверим порядок вызова методов viewContract
     fun handleGitHubResponse_ResponseFailure_ViewContractMethodOrder() {
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
-        Mockito.`when`(response.isSuccessful).thenReturn(false)
+        val response = mock<Response<SearchResponse?>>()
+        whenever(response.isSuccessful).thenReturn(false)
         presenter.handleGitHubResponse(response)
 
         //Определяем порядок вызова методов какого класса мы хотим проверить
-        val inOrder = Mockito.inOrder(viewContract)
+        val inOrder = inOrder(viewContract)
         //Прописываем порядок вызова методов
         inOrder.verify(viewContract).displayLoading(false)
         inOrder.verify(viewContract).displayError("Response is null or unsuccessful")
@@ -90,60 +91,90 @@ class SearchPresenterTest {
 
     @Test //Проверим пустой ответ сервера
     fun handleGitHubResponse_ResponseIsEmpty() {
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
-        Mockito.`when`(response.body()).thenReturn(null)
+        val response = mock<Response<SearchResponse?>>()
+        whenever(response.body()).thenReturn(null)
         //Вызываем handleGitHubResponse()
         presenter.handleGitHubResponse(response)
         //Убеждаемся, что body действительно null
-        Assert.assertNull(response.body())
+        assertNull(response.body())
     }
 
     @Test //Теперь проверим непустой ответ сервера
     fun handleGitHubResponse_ResponseIsNotEmpty() {
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
-        Mockito.`when`(response.body()).thenReturn(Mockito.mock(SearchResponse::class.java))
+        val response = mock<Response<SearchResponse?>>()
+        whenever(response.body()).thenReturn(mock<SearchResponse>())
         //Вызываем handleGitHubResponse()
         presenter.handleGitHubResponse(response)
         //Убеждаемся, что body действительно null
-        Assert.assertNotNull(response.body())
+        assertNotNull(response.body())
     }
 
     @Test //Проверим как обрабатывается случай, если ответ от сервера пришел пустой
     fun handleGitHubResponse_EmptyResponse() {
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
+        val response = mock<Response<SearchResponse?>>()
         //Устанавливаем правило, что ответ успешный
-        Mockito.`when`(response.isSuccessful).thenReturn(true)
+        whenever(response.isSuccessful).thenReturn(true)
         //При этом body ответа == null. В таком случае должен вызываться метод viewContract.displayError(...)
-        Mockito.`when`(response.body()).thenReturn(null)
+        whenever(response.body()).thenReturn(null)
 
         //Вызываем handleGitHubResponse()
         presenter.handleGitHubResponse(response)
 
         //Убеждаемся, что вызывается верный метод: viewContract.displayError("Search results or total count are null"), и что он вызывается единожды
-        Mockito.verify(viewContract, Mockito.times(1))
+        verify(viewContract, times(1))
             .displayError("Search results or total count are null")
     }
 
     @Test //Пришло время проверить успешный ответ, так как все остальные случаи мы уже покрыли тестами
     fun handleGitHubResponse_Success() {
         //Мокаем ответ
-        val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>
+        val response = mock<Response<SearchResponse?>>()
         //Мокаем тело ответа
-        val searchResponse = Mockito.mock(SearchResponse::class.java)
+        val searchResponse = mock<SearchResponse>()
         //Мокаем список
-        val searchResults = listOf(Mockito.mock(SearchResult::class.java))
+        val searchResults = listOf(mock<SearchResult>())
 
         //Прописываем правила
         //Когда ответ приходит, возвращаем response.isSuccessful == true и остальные данные в процессе выполнения метода handleGitHubResponse
-        Mockito.`when`(response.isSuccessful).thenReturn(true)
-        Mockito.`when`(response.body()).thenReturn(searchResponse)
-        Mockito.`when`(searchResponse.searchResults).thenReturn(searchResults)
-        Mockito.`when`(searchResponse.totalCount).thenReturn(101)
+        whenever(response.isSuccessful).thenReturn(true)
+        whenever(response.body()).thenReturn(searchResponse)
+        whenever(searchResponse.searchResults).thenReturn(searchResults)
+        whenever(searchResponse.totalCount).thenReturn(101)
 
         //Запускаем выполнение метода
         presenter.handleGitHubResponse(response)
 
         //Убеждаемся, что ответ от сервера обрабатывается корректно
-        Mockito.verify(viewContract, Mockito.times(1)).displaySearchResults(searchResults, 101)
+        verify(viewContract, times(1)).displaySearchResults(searchResults, 101)
+    }
+
+    @Test
+    fun onAttach_Test() {
+        presenter.onDetach()
+
+        // Проверяем, что viewContract равно null перед отсоединением
+        assertNull(getPrivateField(presenter, "viewContract"))
+
+        presenter.onAttach(viewContract)
+
+        // Проверяем, что viewContract не равно null после отсоединения
+        assertNotNull(getPrivateField(presenter, "viewContract"))
+        assertEquals(viewContract, getPrivateField(presenter, "viewContract"))
+    }
+
+    @Test
+    fun onDetach_Test() {
+        // Проверяем, что viewContract не равно null перед отсоединением
+        assertEquals(viewContract, getPrivateField(presenter, "viewContract"))
+
+        presenter.onDetach()
+
+        // Проверяем, что viewContract становится равным null после отсоединения
+        assertEquals(null, getPrivateField(presenter, "viewContract"))
+    }
+
+    @After
+    fun close() {
+        presenter.onDetach()
     }
 }
