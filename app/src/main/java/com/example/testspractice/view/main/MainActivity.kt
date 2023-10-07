@@ -18,7 +18,6 @@ import com.example.testspractice.view.search.SearchResultAdapter
 import com.example.testspractice.view.search.ViewSearchContract
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
     private lateinit var binding: ActivityMainBinding
@@ -33,7 +32,13 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        presenter.onAttach(this)
         setUI()
+    }
+
+    override fun onDestroy() {
+        presenter.onDetach()
+        super.onDestroy()
     }
 
     private fun setUI() {
