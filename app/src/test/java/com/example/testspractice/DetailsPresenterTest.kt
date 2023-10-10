@@ -53,7 +53,7 @@ class DetailsPresenterTest {
     }
 
     @Test
-    fun onAttach_Test() {
+    fun onAttach_Reflection_Test() {
         presenter.onDetach()
 
         assertNull(getPrivateField(presenter, "viewContract"))
@@ -65,7 +65,7 @@ class DetailsPresenterTest {
     }
 
     @Test
-    fun onDetach_Test() {
+    fun onDetach_Reflection_Test() {
         assertEquals(viewContract, getPrivateField(presenter, "viewContract"))
 
         presenter.onDetach()

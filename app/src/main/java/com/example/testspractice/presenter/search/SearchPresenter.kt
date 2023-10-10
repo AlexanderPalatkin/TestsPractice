@@ -18,6 +18,7 @@ internal class SearchPresenter internal constructor(
 
     override fun onAttach(view: ViewContract) {
         viewContract = view as ViewSearchContract
+        viewContract?.onAttached()
     }
 
     override fun onDetach() {

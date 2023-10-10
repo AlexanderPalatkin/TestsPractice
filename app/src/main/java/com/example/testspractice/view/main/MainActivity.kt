@@ -109,6 +109,10 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         }
     }
 
+    override fun onAttached() {
+        // This method does not require implementation.
+    }
+
     companion object {
         const val BASE_URL = "https://api.github.com"
     }
