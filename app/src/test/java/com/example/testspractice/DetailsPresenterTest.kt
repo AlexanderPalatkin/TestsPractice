@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import kotlin.random.Random
 
 class DetailsPresenterTest {
 
@@ -30,7 +29,7 @@ class DetailsPresenterTest {
 
     @Test
     fun setCounter_Test() {
-        val count = Random.nextInt()
+        val count = 45
         presenter.setCounter(count)
 
         assertEquals(count, getPrivateField(presenter, "count"))
