@@ -1,4 +1,4 @@
-package com.example.testspractice.view.main
+package com.example.testpractice.main
 
 import android.os.Bundle
 import android.view.View
@@ -9,15 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.testspractice.R
 import com.example.testspractice.databinding.ActivityMainBinding
 import com.example.testspractice.model.SearchResult
+import com.example.testspractice.presenter.RepositoryContract
 import com.example.testspractice.presenter.search.PresenterSearchContract
 import com.example.testspractice.presenter.search.SearchPresenter
 import com.example.testspractice.repository.GitHubApi
-import com.example.testspractice.repository.GitHubRepository
+import com.example.testpractice.repository.GitHubRepository
 import com.example.testspractice.view.details.DetailsActivity
 import com.example.testspractice.view.search.SearchResultAdapter
 import com.example.testspractice.view.search.ViewSearchContract
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
     private lateinit var binding: ActivityMainBinding
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         })
     }
 
-    private fun createRepository(): GitHubRepository {
+    private fun createRepository(): RepositoryContract {
         return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
     }
 
@@ -89,6 +91,13 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int
     ) {
+        with(binding.totalCountTextView) {
+            visibility = View.VISIBLE
+            text = String.format(
+                Locale.getDefault(), getString(R.string.results_count),
+                totalCount
+            )
+        }
         this.totalCount = totalCount
         adapter.updateResults(searchResults)
     }
@@ -107,6 +116,10 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         } else {
             binding.progressBar.visibility = View.GONE
         }
+    }
+
+    override fun onAttached() {
+        // This method does not require implementation.
     }
 
     companion object {

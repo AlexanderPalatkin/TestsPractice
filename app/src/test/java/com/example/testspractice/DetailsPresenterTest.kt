@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import kotlin.random.Random
 
 class DetailsPresenterTest {
 
@@ -30,7 +29,7 @@ class DetailsPresenterTest {
 
     @Test
     fun setCounter_Test() {
-        val count = Random.nextInt()
+        val count = 45
         presenter.setCounter(count)
 
         assertEquals(count, getPrivateField(presenter, "count"))
@@ -53,7 +52,7 @@ class DetailsPresenterTest {
     }
 
     @Test
-    fun onAttach_Test() {
+    fun onAttach_Reflection_Test() {
         presenter.onDetach()
 
         assertNull(getPrivateField(presenter, "viewContract"))
@@ -65,7 +64,7 @@ class DetailsPresenterTest {
     }
 
     @Test
-    fun onDetach_Test() {
+    fun onDetach_Reflection_Test() {
         assertEquals(viewContract, getPrivateField(presenter, "viewContract"))
 
         presenter.onDetach()

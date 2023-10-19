@@ -41,6 +41,10 @@ class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
         setCountText(count)
     }
 
+    override fun onAttached() {
+        // This method does not require implementation.
+    }
+
     private fun setCountText(count: Int) {
         binding.totalCountTextView.text =
             String.format(Locale.getDefault(), getString(R.string.results_count), count)

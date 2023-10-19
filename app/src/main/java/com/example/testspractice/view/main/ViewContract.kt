@@ -1,3 +1,6 @@
 package com.example.testspractice.view.main
 
-internal interface ViewContract {}
+internal interface ViewContract {
+
+    fun onAttached()
+}

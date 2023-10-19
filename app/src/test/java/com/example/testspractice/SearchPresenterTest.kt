@@ -3,7 +3,7 @@ package com.example.testspractice
 import com.example.testspractice.model.SearchResponse
 import com.example.testspractice.model.SearchResult
 import com.example.testspractice.presenter.search.SearchPresenter
-import com.example.testspractice.repository.GitHubRepository
+import com.example.testpractice.repository.GitHubRepository
 import com.example.testspractice.view.search.ViewSearchContract
 import com.nhaarman.mockito_kotlin.*
 import org.junit.After
@@ -149,7 +149,7 @@ class SearchPresenterTest {
     }
 
     @Test
-    fun onAttach_Test() {
+    fun onAttach_Reflection_Test() {
         presenter.onDetach()
 
         // Проверяем, что viewContract равно null перед отсоединением
@@ -163,7 +163,7 @@ class SearchPresenterTest {
     }
 
     @Test
-    fun onDetach_Test() {
+    fun onDetach_Reflection_Test() {
         // Проверяем, что viewContract не равно null перед отсоединением
         assertEquals(viewContract, getPrivateField(presenter, "viewContract"))
 
@@ -171,6 +171,18 @@ class SearchPresenterTest {
 
         // Проверяем, что viewContract становится равным null после отсоединения
         assertEquals(null, getPrivateField(presenter, "viewContract"))
+    }
+
+    @Test
+    fun onAttach_Test() {
+        presenter.onAttach(viewContract)
+        verify(viewContract, times(1)).onAttached()
+    }
+
+    @Test
+    fun onDetach_Test() {
+        presenter.onDetach()
+        verify(viewContract, never()).onAttached()
     }
 
     @After

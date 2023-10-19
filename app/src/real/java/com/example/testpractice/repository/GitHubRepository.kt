@@ -1,15 +1,18 @@
-package com.example.testspractice.repository
+package com.example.testpractice.repository
 
 import com.example.testspractice.model.SearchResponse
+import com.example.testspractice.presenter.RepositoryContract
+import com.example.testspractice.repository.GitHubApi
+import com.example.testspractice.repository.RepositoryCallback
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-internal class GitHubRepository(private val gitHubApi: GitHubApi) {
+internal class GitHubRepository(private val gitHubApi: GitHubApi) : RepositoryContract {
 
-    fun searchGithub(
+    override fun searchGithub(
         query: String,
-        callback: GitHubRepositoryCallback
+        callback: RepositoryCallback
     ) {
         val call = gitHubApi.searchGithub(query)
         call?.enqueue(object : Callback<SearchResponse?> {
@@ -28,10 +31,5 @@ internal class GitHubRepository(private val gitHubApi: GitHubApi) {
                 callback.handleGitHubError()
             }
         })
-    }
-
-    interface GitHubRepositoryCallback {
-        fun handleGitHubResponse(response: Response<SearchResponse?>?)
-        fun handleGitHubError()
     }
 }
