@@ -1,4 +1,4 @@
-package com.example.testspractice.view.main
+package com.example.testpractice.main
 
 import android.os.Bundle
 import android.view.View
@@ -6,16 +6,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.testspractice.BuildConfig
 import com.example.testspractice.R
 import com.example.testspractice.databinding.ActivityMainBinding
 import com.example.testspractice.model.SearchResult
 import com.example.testspractice.presenter.RepositoryContract
 import com.example.testspractice.presenter.search.PresenterSearchContract
 import com.example.testspractice.presenter.search.SearchPresenter
-import com.example.testspractice.repository.FakeGitHubRepository
 import com.example.testspractice.repository.GitHubApi
-import com.example.testspractice.repository.GitHubRepository
+import com.example.testpractice.repository.GitHubRepository
 import com.example.testspractice.view.details.DetailsActivity
 import com.example.testspractice.view.search.SearchResultAdapter
 import com.example.testspractice.view.search.ViewSearchContract
@@ -79,11 +77,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     }
 
     private fun createRepository(): RepositoryContract {
-        return if (BuildConfig.TYPE == FAKE) {
-            FakeGitHubRepository()
-        } else {
-            GitHubRepository(createRetrofit().create(GitHubApi::class.java))
-        }
+        return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
     }
 
     private fun createRetrofit(): Retrofit {
@@ -130,6 +124,5 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     companion object {
         const val BASE_URL = "https://api.github.com"
-        const val FAKE = "FAKE"
     }
 }

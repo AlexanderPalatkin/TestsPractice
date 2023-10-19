@@ -1,7 +1,9 @@
-package com.example.testspractice.repository
+package com.example.testpractice.repository
 
 import com.example.testspractice.model.SearchResponse
 import com.example.testspractice.presenter.RepositoryContract
+import com.example.testspractice.repository.GitHubApi
+import com.example.testspractice.repository.RepositoryCallback
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

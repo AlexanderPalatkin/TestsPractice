@@ -3,7 +3,7 @@ package com.example.testspractice
 import com.example.testspractice.model.SearchResponse
 import com.example.testspractice.model.SearchResult
 import com.example.testspractice.presenter.search.SearchPresenter
-import com.example.testspractice.repository.GitHubRepository
+import com.example.testpractice.repository.GitHubRepository
 import com.example.testspractice.view.search.ViewSearchContract
 import com.nhaarman.mockito_kotlin.*
 import org.junit.After
