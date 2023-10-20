@@ -3,6 +3,10 @@ package com.example.testspractice
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -82,11 +86,25 @@ class BehaviorTest {
     //Убеждаемся, что DetailsScreen открывается
     @Test
     fun test_OpenDetailsScreen() {
+
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
+        searchButton.click()
+
+        val changedTextMainScreen =
+            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextView")), TIMEOUT)
+
+        assertEquals(changedTextMainScreen.text.toString(), "Number of results: 835")
+
         //Находим кнопку
         val toDetails = uiDevice.findObject(By.res(packageName,
             "toDetailsActivityButton"))
         //Кликаем по ней
         toDetails.click()
+
+        onView(withId(R.id.totalCountTextView)).check(matches(isDisplayed()))
 
         //Ожидаем конкретного события: появления текстового поля totalCountTextView.
         //Это будет означать, что DetailsScreen открылся и это поле видно на экране.
@@ -99,9 +117,7 @@ class BehaviorTest {
         //Убеждаемся, что поле видно и содержит предполагаемый текст.
         //Обратите внимание, что текст должен быть "Number of results: 0",
         //так как мы кликаем по кнопке не отправляя никаких поисковых запросов.
-        //Чтобы проверить отображение определенного количества репозиториев,
-        //вам в одном и том же методе нужно отправить запрос на сервер и открыть DetailsScreen.
-        assertEquals(changedText.text, "Number of results: 0")
+        assertEquals(changedText.text, "Number of results: 835")
     }
 
     companion object {
