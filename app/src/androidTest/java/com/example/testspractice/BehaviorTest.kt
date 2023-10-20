@@ -3,9 +3,6 @@ package com.example.testspractice
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.pressImeActionButton
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -68,8 +65,9 @@ class BehaviorTest {
         //Устанавливаем значение
         editText.text = "UiAutomator"
 
-        //Отправляем запрос через Espresso
-        onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
+        //Отправляем запрос
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
+        searchButton.click()
 
         //Ожидаем конкретного события: появления текстового поля totalCountTextView.
         //Это будет означать, что сервер вернул ответ с какими-то данными, то есть запрос отработал.
