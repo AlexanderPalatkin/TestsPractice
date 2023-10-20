@@ -3,16 +3,10 @@ package com.example.testspractice
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.Until
+import androidx.test.uiautomator.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -99,12 +93,8 @@ class BehaviorTest {
         assertEquals(changedTextMainScreen.text.toString(), "Number of results: 835")
 
         //Находим кнопку
-        val toDetails = uiDevice.findObject(By.res(packageName,
-            "toDetailsActivityButton"))
-        //Кликаем по ней
-        toDetails.click()
-
-        onView(withId(R.id.totalCountTextView)).check(matches(isDisplayed()))
+        val toDetails: UiObject = uiDevice.findObject(UiSelector().textContains("to details"))
+        toDetails.clickAndWaitForNewWindow()
 
         //Ожидаем конкретного события: появления текстового поля totalCountTextView.
         //Это будет означать, что DetailsScreen открылся и это поле видно на экране.
