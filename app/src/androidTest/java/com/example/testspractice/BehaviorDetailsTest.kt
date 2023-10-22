@@ -60,7 +60,7 @@ class BehaviorDetailsTest {
                 Until.findObject(By.res(packageName, "totalCountTextView")),
                 TIMEOUT
             )
-        assertEquals(changedText.text, "Number of results: -1")
+        assertEquals(changedText.text, TEST_NUMBER_OF_RESULTS_MINUS_1)
     }
 
     @Test
@@ -72,7 +72,7 @@ class BehaviorDetailsTest {
                 Until.findObject(By.res(packageName, "totalCountTextView")),
                 TIMEOUT
             )
-        assertEquals(changedText.text, "Number of results: 1")
+        assertEquals(changedText.text, TEST_NUMBER_OF_RESULTS_PLUS_1)
     }
 
     companion object {

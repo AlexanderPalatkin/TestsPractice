@@ -18,10 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     sourceSets {
-        androidTest {
-            java.srcDirs += "src/sharedTestData/java"
-        }
-        test {
+        debug {
             java.srcDirs += "src/sharedTestData/java"
         }
     }
