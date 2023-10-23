@@ -1,9 +1,10 @@
-package com.example.testspractice
+package com.example.testspractice.presenter
 
 import com.example.testspractice.model.SearchResponse
 import com.example.testspractice.model.SearchResult
 import com.example.testspractice.presenter.search.SearchPresenter
 import com.example.testpractice.repository.GitHubRepository
+import com.example.testspractice.getPrivateField
 import com.example.testspractice.view.search.ViewSearchContract
 import com.nhaarman.mockito_kotlin.*
 import org.junit.After

@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Test
 
 class MainActivityEspressoTest {
+
     private lateinit var scenario: ActivityScenario<MainActivity>
 
     @Before

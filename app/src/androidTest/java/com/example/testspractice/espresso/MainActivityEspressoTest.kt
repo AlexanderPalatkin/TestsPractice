@@ -1,4 +1,4 @@
-package com.example.testspractice
+package com.example.testspractice.espresso
 
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
@@ -9,6 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.testpractice.main.MainActivity
+import com.example.testspractice.R
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Assert.assertEquals

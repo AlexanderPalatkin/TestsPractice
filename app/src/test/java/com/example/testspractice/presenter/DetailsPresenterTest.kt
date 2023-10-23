@@ -1,5 +1,6 @@
-package com.example.testspractice
+package com.example.testspractice.presenter
 
+import com.example.testspractice.getPrivateField
 import com.example.testspractice.presenter.details.DetailsPresenter
 import com.example.testspractice.view.details.ViewDetailsContract
 import com.nhaarman.mockito_kotlin.times

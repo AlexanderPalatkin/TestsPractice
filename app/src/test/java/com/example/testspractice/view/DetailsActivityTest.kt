@@ -1,4 +1,4 @@
-package com.example.testspractice
+package com.example.testspractice.view
 
 import android.content.Context
 import android.os.Build
@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.testspractice.*
 import com.example.testspractice.view.details.DetailsActivity
 import junit.framework.TestCase
 import org.junit.After
@@ -117,7 +118,7 @@ class DetailsActivityTest {
         val count = TEST_NUMBER
         val intent = DetailsActivity.getIntent(context, count)
         val bundle = intent.extras
-        TestCase.assertEquals(count, bundle?.getInt(DetailsActivity.TOTAL_COUNT_EXTRA, 0))
+        TestCase.assertEquals(count, bundle?.getInt("TOTAL_COUNT_EXTRA", 0))
     }
 
     @After
