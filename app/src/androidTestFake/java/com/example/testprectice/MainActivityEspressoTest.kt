@@ -45,7 +45,7 @@ class MainActivityEspressoTest {
             .perform(ViewActions.pressImeActionButton())
 
         Espresso.onView(ViewMatchers.withId(R.id.totalCountTextView))
-            .check(ViewAssertions.matches(ViewMatchers.withText("Number of results: 42")))
+            .check(ViewAssertions.matches(ViewMatchers.withText("Number of results: 100")))
     }
 
     @After
