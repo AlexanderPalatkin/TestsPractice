@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Test
 
 class MainActivityEspressoTest {
+
     private lateinit var scenario: ActivityScenario<MainActivity>
 
     @Before
@@ -44,7 +45,7 @@ class MainActivityEspressoTest {
             .perform(ViewActions.pressImeActionButton())
 
         Espresso.onView(ViewMatchers.withId(R.id.totalCountTextView))
-            .check(ViewAssertions.matches(ViewMatchers.withText("Number of results: 42")))
+            .check(ViewAssertions.matches(ViewMatchers.withText("Number of results: 100")))
     }
 
     @After

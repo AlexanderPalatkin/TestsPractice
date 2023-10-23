@@ -1,4 +1,4 @@
-package com.example.testspractice
+package com.example.testspractice.espresso
 
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
@@ -9,6 +9,10 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.testspractice.R
+import com.example.testspractice.TEST_NUMBER_OF_RESULTS_MINUS_1
+import com.example.testspractice.TEST_NUMBER_OF_RESULTS_PLUS_1
+import com.example.testspractice.TEST_NUMBER_OF_RESULTS_ZERO
 import com.example.testspractice.view.details.DetailsActivity
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -80,7 +84,9 @@ class DetailsActivityEspressoTest {
     @Test
     fun activityButtonDecrement_IsWorking() {
         onView(withId(R.id.decrementButton)).perform(click())
-        onView(withId(R.id.totalCountTextView)).check(matches(withText(TEST_NUMBER_OF_RESULTS_MINUS_1)))
+        onView(withId(R.id.totalCountTextView)).check(matches(withText(
+            TEST_NUMBER_OF_RESULTS_MINUS_1
+        )))
     }
 
     @After

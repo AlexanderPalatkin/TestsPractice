@@ -1,4 +1,4 @@
-package com.example.testspractice
+package com.example.testspractice.automator
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,8 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
+import com.example.testspractice.TEST_NUMBER_OF_RESULTS_MINUS_1
+import com.example.testspractice.TEST_NUMBER_OF_RESULTS_PLUS_1
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before

@@ -3,6 +3,7 @@ package com.example.testspractice.view.search
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testspractice.R
 import com.example.testspractice.databinding.ListItemBinding
@@ -42,6 +43,10 @@ internal class SearchResultAdapter :
         fun bind(searchResult: SearchResult) {
             ListItemBinding.bind(itemView).apply {
                 repositoryName.text = searchResult.fullName
+                repositoryName.setOnClickListener {
+                    Toast.makeText(itemView.context, searchResult.fullName,
+                        Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
