@@ -6,19 +6,15 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.testpractice.search.ScreenState
+import com.example.testpractice.search.SearchViewModel
 import com.example.testspractice.R
 import com.example.testspractice.databinding.ActivityMainBinding
 import com.example.testspractice.model.SearchResult
-import com.example.testspractice.presenter.RepositoryContract
-import com.example.testspractice.presenter.search.PresenterSearchContract
-import com.example.testspractice.presenter.search.SearchPresenter
-import com.example.testspractice.repository.GitHubApi
-import com.example.testpractice.repository.GitHubRepository
 import com.example.testspractice.view.details.DetailsActivity
 import com.example.testspractice.view.search.SearchResultAdapter
 import com.example.testspractice.view.search.ViewSearchContract
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
@@ -26,7 +22,9 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     private val adapter = SearchResultAdapter()
 
-    private val presenter: PresenterSearchContract = SearchPresenter(this, createRepository())
+    private val viewModel: SearchViewModel by lazy {
+        ViewModelProvider(this)[SearchViewModel::class.java]
+    }
 
     private var totalCount: Int = 0
 
@@ -34,13 +32,8 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        presenter.onAttach(this)
         setUI()
-    }
-
-    override fun onDestroy() {
-        presenter.onDetach()
-        super.onDestroy()
+        viewModel.subscribeToLiveData().observe(this) { onStateChange(it) }
     }
 
     private fun setUI() {
@@ -52,6 +45,34 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         setRecyclerView()
     }
 
+    private fun onStateChange(screenState: ScreenState) {
+        when (screenState) {
+            is ScreenState.Working -> {
+                val searchResponse = screenState.searchResponse
+                val totalCount = searchResponse.totalCount
+                binding.progressBar.visibility = View.GONE
+                with(binding.totalCountTextView) {
+                    visibility = View.VISIBLE
+                    text =
+                        String.format(
+                            Locale.getDefault(),
+                            getString(R.string.results_count),
+                            totalCount
+                        )
+                }
+                this.totalCount = totalCount!!
+                adapter.updateResults(searchResponse.searchResults!!)
+            }
+            is ScreenState.Loading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is ScreenState.Error -> {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(this, screenState.error.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setRecyclerView() {
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
@@ -61,7 +82,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         binding.searchButton.setOnClickListener {
             val query = binding.searchEditText.text.toString()
             if (query.isNotBlank()) {
-                presenter.searchGitHub(query)
+                viewModel.searchGitHub(query)
             } else {
                 Toast.makeText(
                     this@MainActivity,
@@ -77,7 +98,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = binding.searchEditText.text.toString()
                 if (query.isNotBlank()) {
-                    presenter.searchGitHub(query)
+                    viewModel.searchGitHub(query)
                     return@OnEditorActionListener true
                 } else {
                     Toast.makeText(
@@ -90,17 +111,6 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
             }
             false
         })
-    }
-
-    private fun createRepository(): RepositoryContract {
-        return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
-    }
-
-    private fun createRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
     }
 
     override fun displaySearchResults(

@@ -68,6 +68,12 @@ dependencies {
     //Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
+
+    //RxJava2
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
@@ -96,6 +102,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     debugImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
 
     //Test
     testImplementation 'androidx.test:core:1.5.0'
@@ -103,4 +110,5 @@ dependencies {
     testImplementation 'androidx.test.ext:junit:1.1.5'
     testImplementation 'androidx.test.ext:truth:1.5.0'
     debugImplementation 'androidx.fragment:fragment-testing:1.6.1'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
 }
