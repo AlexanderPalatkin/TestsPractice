@@ -4,18 +4,22 @@ import com.example.testspractice.model.SearchResponse
 import com.example.testspractice.model.SearchResult
 import com.example.testspractice.presenter.RepositoryContract
 import com.example.testspractice.repository.RepositoryCallback
+import io.reactivex.Observable
 import retrofit2.Response
 import kotlin.random.Random
 
-internal class GitHubRepository : RepositoryContract {
+class GitHubRepository : RepositoryContract {
     override fun searchGithub(
         query: String,
         callback: RepositoryCallback
     ) {
-        callback.handleGitHubResponse(Response.success(getFakeResponse()))
+        callback.handleGitHubResponse(Response.success(generateSearchResponse()))
+    }
+    override fun searchGithub(query: String): Observable<SearchResponse> {
+        return Observable.just(generateSearchResponse())
     }
 
-    private fun getFakeResponse(): SearchResponse {
+    private fun generateSearchResponse(): SearchResponse {
         val list: MutableList<SearchResult> = mutableListOf()
         for (index in 1..100) {
             list.add(
@@ -36,5 +40,9 @@ internal class GitHubRepository : RepositoryContract {
             )
         }
         return SearchResponse(list.size, list)
+    }
+
+    override suspend fun searchGithubAsync(query: String): SearchResponse {
+        return generateSearchResponse()
     }
 }

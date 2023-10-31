@@ -1,7 +1,9 @@
-package com.example.testspractice.repository
+package com.example.testpractice
 
-import com.example.testspractice.model.SearchResponse
 import com.example.testpractice.repository.GitHubRepository
+import com.example.testspractice.model.SearchResponse
+import com.example.testspractice.repository.GitHubApi
+import com.example.testspractice.repository.RepositoryCallback
 import okhttp3.Request
 import okio.Timeout
 import org.junit.Before
